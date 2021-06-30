@@ -44,7 +44,7 @@ def classification(testdata, testbdata,centers,thresholds):#根据数据离聚�
 
 if __name__ == '__main__':
     #with open("E:\\dm\\trainingdata.csv", "r",encoding="utf-8") as f:#取总数据集中的随机正样本数据作为测试集
-    with open("E:\\dm\\500right.csv", "r",encoding="utf-8") as f:#读取正样本测试文件
+    with open("datasets\\500right.csv", "r",encoding="utf-8") as f:#读取正样本测试文件
             reader = csv.reader(f)
             testdata=list(reader)#样本数据转化为列表格式
             testdatafinal=[]#最终用于测试的数据
@@ -54,7 +54,7 @@ if __name__ == '__main__':
             #for list_num in range(1300,60300,500):#读取随机产生的数据集作为测试集
                 testdata[list_num]=[ float(x) for x in testdata[list_num]]#数据从字符串转化为浮点，便于之后的计算             
                 testdatafinal.append(testdata[list_num]) #生成加工后的最终的测试数据
-    with open("E:\\dm\\500black.csv", "r",encoding="utf-8") as f:#读取黑样本测试文件
+    with open("datasets\\500black.csv", "r",encoding="utf-8") as f:#读取黑样本测试文件
             reader = csv.reader(f)
             testbdata=list(reader)#样本数据转化为列表格式
             testbdatafinal=[]#最终用于测试的数据
@@ -64,7 +64,7 @@ if __name__ == '__main__':
                 testbdata[list_num]=[ float(x) for x in testbdata[list_num]]#数据从字符串转化为浮点，便于之后的计算             
                 testbdatafinal.append(testbdata[list_num]) #生成加工后的最终的测试数据
 
-    with open("E:\\dm\\centers1.csv", "r",encoding="utf-8") as f:#读取聚类中心文件
+    with open("datasets\\centers1.csv", "r",encoding="utf-8") as f:#读取聚类中心文件
             reader = csv.reader(f)
             centers=list(reader)#转化为列表格式
             for list_num in range(len(centers)):
@@ -73,7 +73,7 @@ if __name__ == '__main__':
             #print("聚类中心：")
             #print(centers)
 
-    with open("E:\\dm\\thresholds1.csv", "r",encoding="utf-8") as f:#读取阈值文件
+    with open("datasets\\thresholds1.csv", "r",encoding="utf-8") as f:#读取阈值文件
             reader = csv.reader(f)
             data=list(reader)#转化为列表格式
             thresh=[float(x) for x in data[0]]#转化为浮点型，同时转化为一维列表
@@ -90,19 +90,5 @@ if __name__ == '__main__':
     with open("class_result.csv", "w",newline= '') as csvFile:     # 输出分类结果（黑样本的编号）
            csvWriter = csv.writer(csvFile)
            csvWriter.writerow(class_result)
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
 
 

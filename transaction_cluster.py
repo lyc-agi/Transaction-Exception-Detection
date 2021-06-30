@@ -128,7 +128,7 @@ def besthres(blackdata,rightdists,maxdists,centers):#确定最佳阈值
 
 
 if __name__ == '__main__':
-    with open("E:\\dm\\trainingdata1.csv", "r",encoding="utf-8") as f:#读入正样本聚类数据集
+    with open("datasets\\trainingdata1.csv", "r",encoding="utf-8") as f:#读入正样本聚类数据集
         reader = csv.reader(f)
         traindata=list(reader)#样本数据转化为列表格式
         traindatafinal=[]#最终用于训练的数据
@@ -138,7 +138,7 @@ if __name__ == '__main__':
             traindata[list_num]=[ float(x) for x in traindata[list_num]]#数据从字符串转化为浮点，便于之后的计算
             traindatafinal.append(traindata[list_num]) #生成加工后的最终的训练数据
 
-    with open("E:\\dm\\blackdata1.csv", "r",encoding="utf-8") as f:#读入黑样本训练数据集
+    with open("datasets\\blackdata1.csv", "r",encoding="utf-8") as f:#读入黑样本训练数据集
         reader = csv.reader(f)
         blackdata=list(reader)#样本数据转化为列表格式
         blackdatafinal=[]#最终用于训练的数据
@@ -164,17 +164,14 @@ if __name__ == '__main__':
         print("阈值：")  
         print(finalThres)
 
-    with open("E:\\dm\\centers1.csv", "w",newline= '') as csvFile:     # 保存聚类中心为文件，newline= '' 是为了控制csv存入的时候的空行问题
+    with open("datasets\\centers1.csv", "w",newline= '') as csvFile:     # 保存聚类中心为文件，newline= '' 是为了控制csv存入的时候的空行问题
          csvWriter = csv.writer(csvFile)
          for data in finalCenters:
              csvWriter.writerow(data)
-    with open("E:\\dm\\thresholds1.csv", "w",newline= '') as csvFile:     #保存阈值为文件
+    with open("datasets\\thresholds1.csv", "w",newline= '') as csvFile:     #保存阈值为文件
          csvWriter = csv.writer(csvFile)
          csvWriter.writerow(finalThres)
          #csvWriter.writerow(maxDists)#直接用最大距离作为阈值
-
-
-
 
 
 

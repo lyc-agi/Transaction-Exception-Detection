@@ -3,10 +3,10 @@ import math
 import csv
 
 def distance(v1, v2):#计算距离
-    if len(v1) != len(v2):#两个数据的维数不一致
+    if len(v1) != len(v2):
         print(sys.stderr, "invalid v1 and v2 !")
         sys.exit(1)
-    distance = 0#距离值的初始化
+    distance = 0
     for i in range(len(v1)):
         distance += (v1[i] - v2[i]) ** 2
     distance = math.sqrt(distance)#欧式距离
@@ -15,7 +15,7 @@ def distance(v1, v2):#计算距离
 def classification(testdata, testbdata,centers,thresholds):#根据数据离聚类中心的距离判断是否为异常交易
     class_black_list=[]#分类为黑样本的测试集编号的列表初始化
     class_black_num=0#分类为黑样本的数量值初始化
-    class_right_num=0#分类为黑样本的数量值初始化
+    class_right_num=0#分类为正样本的数量值初始化
     for i in range(len(testdata)):#依次取正样本测试数据
         for j in range(len(centers)):#依次取各个聚类中心
             dist=distance(testdata[i],centers[j])#计算距离

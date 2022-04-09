@@ -16,14 +16,14 @@ def classification(testdata, testbdata,centers,thresholds):#根据数据离聚�
     class_black_list=[]#分类为黑样本的测试集编号的列表初始化
     class_black_num=0#分类为黑样本的数量值初始化
     class_right_num=0#分类为正样本的数量值初始化
-    for i in range(len(testdata)):#依次取正样本测试数据
-        for j in range(len(centers)):#依次取各个聚类中心
-            dist=distance(testdata[i],centers[j])#计算距离
-            if dist<thresholds[j]:#比任一聚类中的阈值小就认为是正样本
+    for i in range(len(testdata)):#取正样本测试数据
+        for j in range(len(centers)):#取各个聚类中心
+            dist=distance(testdata[i],centers[j])
+            if dist<thresholds[j]:
                 class_right_num+=1#正样本计数加一
-                break#不用看其他聚类了，跳出内层循环，直接取下一个测试数据
-            if dist>=thresholds[j] and j==len(centers)-1:#如果聚类中心都比较完了仍然大于阈值，认为是黑样本
-                class_black_list.append(i)#保存测试样本的编号
+                break
+        else:#如果聚类中心都比较完了仍然大于阈值，认为是黑样本
+            class_black_list.append(i)
     for i in range(len(testbdata)):#依次取黑样本测试数据
         for j in range(len(centers)):#依次取各个聚类中心
             dist=distance(testbdata[i],centers[j])#计算距离

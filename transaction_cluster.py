@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-import sys, os
+import sys
 import math
 import csv
 
@@ -18,23 +18,23 @@ def traverse(node):#合并类
     else:
         return traverse(node.left) + traverse(node.right)#合并过的数据聚在一类
 
-def distance(v1, v2):#计算距离
-    if len(v1) != len(v2):#两个数据的维数不一致
+def distance(v1, v2):
+    if len(v1) != len(v2):
         print(sys.stderr, "invalid v1 and v2 !")
         sys.exit(1)
-    distance = 0#距离值的初始化
+    distance = 0
     for i in range(len(v1)):
         distance += (v1[i] - v2[i]) ** 2
     distance = math.sqrt(distance)#欧式距离
     return distance
 
 def hcluster(data, n):#聚类过程
-    if len(data) <= 0:#无数据则退出
+    if len(data) <= 0:
         print(sys.stderr, "invalid data")
         sys.exit(1)
     clusters = [Hierarchical(data[i], flag = i) for i in range(len(data))]#初始化，每条数据都是一个类
     centers = [data[i] for i in range(len(data))]#聚类中心初始化为每条数据，之后的操作与聚类操作保持同步
-    distances = {}#存储距离的字典初始化
+    distances = {}#存储距离
     min_id1 = None#两个最接近的数据编号之1
     min_id2 = None#两个最接近的数据编号之2
     currentCluster = -100#作为flag的值，记录当前形成的聚类

@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 
-import sys, os
+import sys
 import math
 import csv
 

@@ -39,16 +39,16 @@ def hcluster(data, n):#聚类过程
     min_id2 = None#两个最接近的数据编号之2
     currentCluster = -100#作为flag的值，记录当前形成的聚类
     while(len(clusters) > n):#聚类结束条件：聚成小于n个类
-        minDist = 1000000000000#最小距离初始化，初始值设置为非常大的值，因为相接近的数据的距离也可能很大，以此避免误判
+        minDist = float('inf')#最小距离初始化，初始值设置为无穷大
         for i in range(len(clusters) - 1):
             for j in range(i + 1, len(clusters)):
                 if distances.get((clusters[i].flag, clusters[j].flag)) == None:#如果之前没有计算过两条数据的距离
-                    distances[(clusters[i].flag, clusters[j].flag)] = distance(clusters[i].center, clusters[j].center)#计算距离并存入字典
+                    distances[(clusters[i].flag, clusters[j].flag)] = distance(clusters[i].center, clusters[j].center)
                 if distances[(clusters[i].flag, clusters[j].flag)] <= minDist:#距离小于或等于之前的最小距离，则更新两条数据的类的编号及距离
                     min_id1 = i
                     min_id2 = j
                     minDist = distances[(clusters[i].flag, clusters[j].flag)]
-        if min_id1 != None and min_id2 != None and minDist != 1000000000000:#如果距离更新了则更新聚类中心
+        if min_id1 != None and min_id2 != None and minDist != float('inf'):#如果距离更新了则更新聚类中心
             newCenter = [(clusters[min_id1].center[i] + clusters[min_id2].center[i])/2 for i in range(len(clusters[min_id2].center))] 
             newFlag = currentCluster
             currentCluster -= 1#改变下一个flag的值
@@ -64,36 +64,36 @@ def hcluster(data, n):#聚类过程
     return finalCluster, finalCenters
 
 def maxdists(cluster, centers):#计算各类中所有数据离聚类中心的距离和最大距离
-    if len(cluster) != len(centers):#聚类的数量和聚类中心的数量不一致，提示并退出
+    if len(cluster) != len(centers):
         print(sys.stderr, "错误：聚类的数量和聚类中心的数量不一致!")
         sys.exit(1)
-    max_dist_list=[]#最大距离列表初始化，各最大距离顺序与聚类中心列表对应
-    dists_list=[]#每个数据离聚类中心的距离的列表初始化，用于之后确定阈值
-    for i in range(len(cluster)):#依次取各个聚类      
-        dists_icluster=[]#保存每个数据离聚类中心的距离，每个聚类开始时初始化一次  
-        for j in range(len(cluster[i])):#计算各个聚类的各个数据离聚类中心的距离
-            dist = 0#距离值的初始化
-            max_dist=0#最大距离值的初始化
+    max_dist_list=[]
+    dists_list=[]#数据离聚类中心的距离的列表
+    for i in range(len(cluster)):
+        dists_icluster=[]#保存每个数据离聚类中心的距离
+        for j in range(len(cluster[i])):
+            dist = 0
+            max_dist=0
             for k in range(len(cluster[i][j])):#计算各个聚类的各个数据离聚类中心的距离
                 dist += (cluster[i][j][k] - centers[i][k]) ** 2
             dist = math.sqrt(dist)
             dists_icluster.append(dist)#保存该数据离聚类中心的距离
-            if dist>max_dist:#比较是否比目前的最大值大
+            if dist>max_dist:
                 max_dist=dist       
         dists_list.append(dists_icluster)#第i个聚类的每个数据离聚类中心的距离的列表加入总距离列表
-        max_dist_list.append(max_dist)#保存最终的最大距离
+        max_dist_list.append(max_dist)#保存最大距离
     return max_dist_list,dists_list
 
 def besthres(blackdata,rightdists,maxdists,centers):#确定最佳阈值
-    thresholds=[]#保存最佳阈值的列表，顺序与聚类中心列表对应
+    thresholds=[]
     black_dists=[None]*len(centers)#黑样本距离列表初始化，将黑样本的距离根据最近的聚类中心划分，顺序与聚类中心列表对应
     for i in range(len(centers)):
         thresholds.append(-1)#将阈值列表初始化
-    for i in range(len(blackdata)):#黑样本找到最接近的聚类中心       
-        min_dist=1000000000000#最小距离值的初始化
+    for i in range(len(blackdata)):#黑样本找到最接近的聚类中心
+        min_dist=float('inf')#最小距离值的初始化
         for j in range(len(centers)):#计算黑样本离各个聚类中心的距离
             dist=distance(blackdata[i],centers[j])                    
-            if dist<min_dist:#比较是否比目前最小距离小
+            if dist<min_dist:
                 min_dist=dist
                 closest_center=j
         if  black_dists[closest_center]==None:#之前没有黑样本最接近该聚类中心，创建列表
@@ -107,13 +107,13 @@ def besthres(blackdata,rightdists,maxdists,centers):#确定最佳阈值
                 thresholds[i]=maxdists[i]#直接用正样本离聚类中心的最大距离作为阈值               
             else:
                 weight=1.0#最大距离的权重
-                min_error_num=100000#最小错误数量
-                thres=maxdists[i]#初始阈值                
+                min_error_num=float('inf')#最小错误数量
+                thres=maxdists[i]#初始阈值
                 for j in range(401):
                     blackin_num=0#黑样本当成正样本的数量
-                    rightout_num=0                  
+                    rightout_num=0
                     for bd in black_dists[i]:
-                        if bd<=thres:#在边界上也被认为是正样本
+                        if bd<=thres:
                             blackin_num+=1
                     for rd in rightdists[i]:
                         if rd>thres:
@@ -124,31 +124,26 @@ def besthres(blackdata,rightdists,maxdists,centers):#确定最佳阈值
                         besthreshold=thres
                     weight-=0.001#权重从1到0.6变化，找到最佳权重
                     thres=maxdists[i]*weight
-                thresholds[i]=besthreshold   
-                
+                thresholds[i]=besthreshold
     return thresholds
 
 
 if __name__ == '__main__':
     with open("datasets\\trainingdata1.csv", "r",encoding="utf-8") as f:#读入正样本聚类数据集
         reader = csv.reader(f)
-        traindata=list(reader)#样本数据转化为列表格式
-        traindatafinal=[]#最终用于训练的数据
-        #print("项名称及数据前10项：")
-        #print(traindata[0:10])
+        traindata=list(reader)
+        traindatafinal=[]
         for list_num in range(0,100000,100):#10万条数据随机选择1000条
-            traindata[list_num]=[ float(x) for x in traindata[list_num]]#数据从字符串转化为浮点，便于之后的计算
-            traindatafinal.append(traindata[list_num]) #生成加工后的最终的训练数据
+            traindata[list_num]=[ float(x) for x in traindata[list_num]]
+            traindatafinal.append(traindata[list_num])
 
     with open("datasets\\blackdata1.csv", "r",encoding="utf-8") as f:#读入黑样本训练数据集
         reader = csv.reader(f)
-        blackdata=list(reader)#样本数据转化为列表格式
-        blackdatafinal=[]#最终用于训练的数据
-        #print("黑样本项名称及数据前10项：")
-        #print(blackdata[0:10])
+        blackdata=list(reader)
+        blackdatafinal=[]
         for list_num in range(len(blackdata)):
-            blackdata[list_num]=[ float(x) for x in blackdata[list_num]]#数据从字符串转化为浮点，便于之后的计算
-            blackdatafinal.append(blackdata[list_num]) #生成加工后的最终的训练数据
+            blackdata[list_num]=[ float(x) for x in blackdata[list_num]]
+            blackdatafinal.append(blackdata[list_num])
 
 
         finalCluster,finalCenters = hcluster(traindatafinal, len(traindatafinal)//40)#聚类，根据聚类数据集大小决定聚类数量，平均每40条数据为一类

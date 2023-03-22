@@ -25,11 +25,10 @@ def distance(v1, v2):
     distance = 0
     for i in range(len(v1)):
         distance += (v1[i] - v2[i]) ** 2
-    distance = math.sqrt(distance)#欧式距离
-    return distance
+    return math.sqrt(distance)#欧式距离
 
 def hcluster(data, n):#聚类过程
-    if len(data) <= 0:
+    if not data:
         print(sys.stderr, "invalid data")
         sys.exit(1)
     clusters = [Hierarchical(data[i], flag = i) for i in range(len(data))]#初始化，每条数据都是一个类
@@ -42,7 +41,7 @@ def hcluster(data, n):#聚类过程
         minDist = float('inf')#最小距离初始化，初始值设置为无穷大
         for i in range(len(clusters) - 1):
             for j in range(i + 1, len(clusters)):
-                if distances.get((clusters[i].flag, clusters[j].flag)) == None:#如果之前没有计算过两条数据的距离
+                if distances.get((clusters[i].flag, clusters[j].flag)) is None:#如果之前没有计算过两条数据的距离
                     distances[(clusters[i].flag, clusters[j].flag)] = distance(clusters[i].center, clusters[j].center)
                 if distances[(clusters[i].flag, clusters[j].flag)] <= minDist:#距离小于或等于之前的最小距离，则更新两条数据的类的编号及距离
                     min_id1 = i

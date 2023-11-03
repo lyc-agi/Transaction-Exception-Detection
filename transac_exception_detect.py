@@ -4,18 +4,18 @@ import sys
 import math
 import csv
 
-def distance(v1, v2):#计算距离
+def distance(v1, v2): # 计算距离
     if len(v1) != len(v2):
         print(sys.stderr, "invalid v1 and v2 !")
         sys.exit(1)
     distance = 0
     for i in range(len(v1)):
         distance += (v1[i] - v2[i]) ** 2
-    distance = math.sqrt(distance)#欧式距离
+    distance = math.sqrt(distance) # 欧式距离
     return distance
 
-def classification(testdata, testbdata,centers,thresholds):#根据数据离聚类中心的距离判断是否为异常交易
-    class_black_list=[]#分类为黑样本的测试集编号
+def classification(testdata, testbdata,centers,thresholds): # 根据数据离聚类中心的距离判断是否为异常交易
+    class_black_list=[] # 分类为黑样本的测试集编号
     class_black_num=0#黑样本数量值
     class_right_num=0#正样本数量值
     for i in range(len(testdata)):#取正样本测试数据
@@ -44,7 +44,6 @@ def classification(testdata, testbdata,centers,thresholds):#根据数据离聚�
     return class_black_list
 
 if __name__ == '__main__':
-    #with open("E:\\dm\\trainingdata.csv", "r",encoding="utf-8") as f:#取总数据集中的随机正样本数据作为测试集
     with open("datasets\\500right.csv", "r",encoding="utf-8") as f:#读取正样本测试文件
             reader = csv.reader(f)
             testdata=list(reader)
